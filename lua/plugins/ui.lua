@@ -27,6 +27,12 @@ return {
             use_git_status_colors = true,
           },
         },
+        filesystem = {
+          filtered_items = {
+            visible = true,
+            hide_dotfiles = false,
+          }
+        }
       })
     end
   },

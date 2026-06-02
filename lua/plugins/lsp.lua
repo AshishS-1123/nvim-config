@@ -26,18 +26,12 @@ return {
       vim.lsp.config("clangd", {
         cmd = {
           "clangd",
-          "--background-index",          -- File indexing in the background
-          "--clang-tidy",                -- Enable linter diagnostics
-          "--header-insertion=iwyu",     -- Include What You Use (auto-imports headers)
-          "--completion-style=detailed", -- Richer details in completion menus
-          "--function-arg-placeholders", -- Snippet placeholders for function arguments
-          "--fallback-style=llvm",       -- Default formatting fallback
-          "-I/usr/include/gstreamer-1.0/**",
-          "-I/usr/include/glib-2.0/**",
-          "-I/usr/lib/x86_64-linux-gnu/glib-2.0/include/**",
-          "-I/home/ashish-shevale/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include",
-          "-I/home/ashish-shevale/flutter/bin/cache/dart-sdk/include",
-
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm",
         },
       })
       vim.lsp.enable("clangd")

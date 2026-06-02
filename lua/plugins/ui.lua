@@ -82,16 +82,36 @@ return {
   },
 
   -- 3. Clickable Gutter Column (Statuscol) - Crucial for clickable folding arrows
+  -- 3. Clickable Gutter Column (Statuscol) - Configured for Dual Line Numbers
   {
     "luukvbaal/statuscol.nvim",
     config = function()
       local builtin = require("statuscol.builtin")
       require("statuscol").setup({
         relculright = true,
+        ft_ignore = { "neo-tree", "lazy", "mason", "toggleterm", "alpha" },
         segments = {
-          { text = { builtin.foldfunc }, click = "v:lua.ScFa" }, -- Makes fold arrows clickable!
-          { text = { "%s" }, click = "v:lua.ScSa" },             -- Git signs / Breakpoints
-          { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" }, -- Line numbers
+          { text = { builtin.foldfunc }, click = "v:lua.ScFa" }, -- Clickable Fold Arrows
+          { text = { "%s" }, click = "v:lua.ScSa" },             -- Git Signs / Breakpoints
+          
+          -- COLUMN 1: Relative Line Numbers (Perfect for quick jumps)
+          {
+            text = { builtin.lnumfunc, "│" },
+            hl = "LineNr", -- Uses the standard, brighter line number color
+            click = "v:lua.ScLa",
+          },
+          -- COLUMN 2: Pure Absolute Line Numbers (Perfect for Debugging)
+          {
+            text = {
+              function(args)
+                -- Right-aligns and pads the numbers cleanly up to 999 lines (change to %4d if working in massive files)
+                return string.format("%2d", args.lnum)
+              end,
+              " "
+            },
+            hl = "NonText", -- Uses a dimmer color group so it doesn't clutter your vision
+            click = "v:lua.ScLa",
+          },
         },
       })
     end,

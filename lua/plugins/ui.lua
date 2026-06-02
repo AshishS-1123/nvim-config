@@ -81,7 +81,6 @@ return {
     end
   },
 
-  -- 3. Clickable Gutter Column (Statuscol) - Crucial for clickable folding arrows
   -- 3. Clickable Gutter Column (Statuscol) - Configured for Dual Line Numbers
   {
     "luukvbaal/statuscol.nvim",
@@ -215,5 +214,38 @@ return {
     lazy = false,
     priority = 1000,
     config = function() vim.cmd.colorscheme("vscode") end
+  },
+
+  -- 9. Smooth Scrolling Engine (Neoscroll)
+  {
+    "karb94/neoscroll.nvim",
+    config = function()
+      require('neoscroll').setup({
+        -- Target these specific default navigation keys for smooth animations
+        mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
+        hide_cursor = true,          -- Temporarily hide cursor during scroll so it doesn't flicker
+        stop_eof = true,             -- Stop scrolling smoothly at the end of the file
+        respect_scrolloff = false,   -- Smooth glide regardless of cursor margins
+        cursor_scrolls_alone = true, -- Cursor glides naturally if window boundaries are reached
+        easing_function = "quadratic" -- Options: "linear", "quadratic", "cubic", "sine", "circular"
+      })
+
+      -- Customizing the scrolling speed directly
+      local neoscroll = require('neoscroll')
+      local keymap = {
+        -- Format: neoscroll.scroll(lines, move_cursor, duration_in_ms)
+        -- Increasing the duration_in_ms makes the scroll SLOWER and smoother.
+        ["<C-d>"] = function() neoscroll.scroll(vim.wo.scroll, true, 350) end,
+        ["<C-u>"] = function() neoscroll.scroll(-vim.wo.scroll, true, 350) end,
+        ["<C-f>"] = function() neoscroll.scroll(vim.api.nvim_win_get_height(0), true, 450) end,
+        ["<C-b>"] = function() neoscroll.scroll(-vim.api.nvim_win_get_height(0), true, 450) end,
+      }
+
+      for key, func in pairs(keymap) do
+        vim.keymap.set('n', key, func)
+        vim.keymap.set('x', key, func)
+        vim.keymap.set('i', key, func, { silent = true })
+      end
+    end
   }
 }

@@ -1,3 +1,12 @@
+# What this config contains?
+
+1. Syntax highlighting for C/C++, Rust, Dart, Javascript/TypeScript.
+2. Uses **neo-tree** to display files and folders.
+3. Shows relative line numbers and absolute line numbers for each file. Use relative line numbers for commands, and absolute line numbers when debugging code.
+4. Code folding for functions, classes, etc based on language.
+5. Interactive breadcrumbs for each file to view different functions in file and move around them.
+6. Git Gutters to see which lines changes for current file.
+
 # Setup Instructions
 
 ```bash
@@ -10,6 +19,5 @@ rm -rf ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
 # Setup directories
 mkdir -p ~/.config/nvim/lua/config ~/.config/nvim/lua/plugins
 cd ~/.config/nvim
-
-
 ```
+

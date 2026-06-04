@@ -25,3 +25,16 @@ vim.diagnostic.config({
   },
 })
 
+-- Styling for the hover docs window
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#1e222a" })
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = "#1e222a", fg = "#56b6c2" })
+
+local function trigger_hover()
+  if #vim.lsp.get_clients({ bufnr = 0 }) > 0 then
+    vim.lsp.buf.hover({ focusable = false, border = "rounded" })
+  end
+end
+
+vim.keymap.set('n', '<C-k>', trigger_hover, { desc = "LSP Hover Docs in Normal Mode", silent = true })
+vim.keymap.set('i', '<C-k>', trigger_hover, { desc = "LSP Hover Docs in Insert Mode", silent = true })
+

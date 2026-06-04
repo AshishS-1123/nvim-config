@@ -62,28 +62,28 @@ return {
 
       -- Optional Handy Tab Switching Shortcuts (Alt + Number)
       local map = vim.keymap.set
-      map("n", "<A-1>", "<Cmd>BufferLineGoToBuffer 1<CR>", { silent = true })
-      map("n", "<A-2>", "<Cmd>BufferLineGoToBuffer 2<CR>", { silent = true })
-      map("n", "<A-3>", "<Cmd>BufferLineGoToBuffer 3<CR>", { silent = true })
-      map("n", "<A-4>", "<Cmd>BufferLineGoToBuffer 4<CR>", { silent = true })
-      map("n", "<A-5>", "<Cmd>BufferLineGoToBuffer 5<CR>", { silent = true })
-      map("n", "<A-6>", "<Cmd>BufferLineGoToBuffer 6<CR>", { silent = true })
-      map("n", "<A-7>", "<Cmd>BufferLineGoToBuffer 7<CR>", { silent = true })
-      map("n", "<A-8>", "<Cmd>BufferLineGoToBuffer 8<CR>", { silent = true })
-      map("n", "<A-9>", "<Cmd>BufferLineGoToBuffer 9<CR>", { silent = true })
-      map("n", "<A-10>", "<Cmd>BufferLineGoToBuffer 10<CR>", { silent = true })
-      map("n", "<A-11>", "<Cmd>BufferLineGoToBuffer 11<CR>", { silent = true })
-      map("n", "<A-12>", "<Cmd>BufferLineGoToBuffer 12<CR>", { silent = true })
-      map("n", "<A-13>", "<Cmd>BufferLineGoToBuffer 13<CR>", { silent = true })
-      map("n", "<A-14>", "<Cmd>BufferLineGoToBuffer 14<CR>", { silent = true })
-      map("n", "<A-15>", "<Cmd>BufferLineGoToBuffer 15<CR>", { silent = true })
-      map("n", "<A-16>", "<Cmd>BufferLineGoToBuffer 16<CR>", { silent = true })
-      map("n", "<A-17>", "<Cmd>BufferLineGoToBuffer 17<CR>", { silent = true })
-      map("n", "<A-18>", "<Cmd>BufferLineGoToBuffer 18<CR>", { silent = true })
-      map("n", "<A-19>", "<Cmd>BufferLineGoToBuffer 19<CR>", { silent = true })
-      map("n", "<A-20>", "<Cmd>BufferLineGoToBuffer 20<CR>", { silent = true })
-      map("n", "<A-p>", "<Cmd>BufferLineCyclePrev<CR>", { silent = true })
-      map("n", "<A-n>", "<Cmd>BufferLineCycleNext<CR>", { silent = true })
+      map("n", "<C-1>", "<Cmd>BufferLineGoToBuffer 1<CR>", { silent = true })
+      map("n", "<C-2>", "<Cmd>BufferLineGoToBuffer 2<CR>", { silent = true })
+      map("n", "<C-3>", "<Cmd>BufferLineGoToBuffer 3<CR>", { silent = true })
+      map("n", "<C-4>", "<Cmd>BufferLineGoToBuffer 4<CR>", { silent = true })
+      map("n", "<C-5>", "<Cmd>BufferLineGoToBuffer 5<CR>", { silent = true })
+      map("n", "<C-6>", "<Cmd>BufferLineGoToBuffer 6<CR>", { silent = true })
+      map("n", "<C-7>", "<Cmd>BufferLineGoToBuffer 7<CR>", { silent = true })
+      map("n", "<C-8>", "<Cmd>BufferLineGoToBuffer 8<CR>", { silent = true })
+      map("n", "<C-9>", "<Cmd>BufferLineGoToBuffer 9<CR>", { silent = true })
+      map("n", "<C-10>", "<Cmd>BufferLineGoToBuffer 10<CR>", { silent = true })
+      map("n", "<C-11>", "<Cmd>BufferLineGoToBuffer 11<CR>", { silent = true })
+      map("n", "<C-12>", "<Cmd>BufferLineGoToBuffer 12<CR>", { silent = true })
+      map("n", "<C-13>", "<Cmd>BufferLineGoToBuffer 13<CR>", { silent = true })
+      map("n", "<C-14>", "<Cmd>BufferLineGoToBuffer 14<CR>", { silent = true })
+      map("n", "<C-15>", "<Cmd>BufferLineGoToBuffer 15<CR>", { silent = true })
+      map("n", "<C-16>", "<Cmd>BufferLineGoToBuffer 16<CR>", { silent = true })
+      map("n", "<C-17>", "<Cmd>BufferLineGoToBuffer 17<CR>", { silent = true })
+      map("n", "<C-18>", "<Cmd>BufferLineGoToBuffer 18<CR>", { silent = true })
+      map("n", "<C-19>", "<Cmd>BufferLineGoToBuffer 19<CR>", { silent = true })
+      map("n", "<C-20>", "<Cmd>BufferLineGoToBuffer 20<CR>", { silent = true })
+      map("n", "<C-p>", "<Cmd>BufferLineCyclePrev<CR>", { silent = true })
+      map("n", "<C-n>", "<Cmd>BufferLineCycleNext<CR>", { silent = true })
     end
   },
 
@@ -191,25 +191,11 @@ return {
       
       -- Initialize default setup
       ts.setup({
-        ensure_installed = { "javascript", "typescript", "rust", "dart", "lua", "c", "cpp" },
+        ensure_installed = { "javascript", "typescript", "rust", "dart", "lua", "c", "cpp", "markdown", "markdown_inline" },
+        auto_install = true,
         highlight = {
           enable = true, -- Activate syntax highlighting
         },
-      })
-      
-      -- Install parsers asynchronously in the background
-      ts.install({ "javascript", "typescript", "rust", "dart", "lua" })
-
-      -- Natively activate Neovim's built-in Tree-sitter engine
-      vim.api.nvim_create_autocmd("FileType", {
-        callback = function(args)
-          local lang = vim.treesitter.language.get_lang(args.match)
-          
-          -- Safe Guard: Only trigger syntax highlighting if the parser is ready
-          if lang and vim.treesitter.language.add(lang) then
-            pcall(vim.treesitter.start, args.buf)
-          end
-        end,
       })
     end
   },
@@ -253,5 +239,11 @@ return {
         vim.keymap.set('i', key, func, { silent = true })
       end
     end
+  },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = { },
   }
 }
+

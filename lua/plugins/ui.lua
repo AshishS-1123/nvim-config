@@ -259,6 +259,23 @@ return {
         },
       })
     end,
-  }
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    branch = 'master',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      local builtin = require('telescope.builtin')
+      
+      -- Keymaps
+      -- Search current file (Ctrl + F)
+      vim.keymap.set('n', '<leader>f', builtin.current_buffer_fuse_grep or builtin.current_buffer_fuzzy_find, { desc = 'Search in current file' })
+      
+      -- Search entire project (Live Grep)
+      vim.keymap.set('n', '<leader>F', builtin.live_grep, { desc = 'Project Search (Live Grep)' })
+      -- Find files by name
+      vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Find Files' })
+    end
+  },
 }
 

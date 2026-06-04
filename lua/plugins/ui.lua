@@ -132,7 +132,10 @@ return {
       }
 
       require("ufo").setup({
-        provider_selector = function(_, _, _)
+        provider_selector = function(bufnr, fileType, buftype)
+          if fileType == "neo-tree" then 
+            return ""
+          end
           return { "lsp", "indent" } -- Uses your LSP setup to determine fold boundaries
         end
       })
@@ -290,8 +293,8 @@ return {
           enabled = true,
         },
         override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+          ["vim.lsp.util.stylize_markdown"] = false,
           ["cmp.entry.get_documentation"] = true,
         },
       },

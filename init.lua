@@ -83,6 +83,13 @@ local function smart_definition_handler()
   end
 end
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    pcall(vim.treesitter.stop)
+  end
+})
+
 vim.keymap.set('n', '<C-k>', trigger_hover, { desc = "LSP Hover Docs in Normal Mode", silent = true })
 vim.keymap.set('i', '<C-k>', trigger_hover, { desc = "LSP Hover Docs in Insert Mode", silent = true })
 vim.keymap.set({'n', 'v'}, '<C-LeftMouse>', smart_definition_handler, { desc = "LSP Definition via Ctrl+Click", silent = true })

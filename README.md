@@ -14,7 +14,7 @@
 
 ```bash
 # Install neovim
-sudo apt install neovim
+sudo snap install nvim --classic
 
 # Cleanup existing configs
 rm -rf ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim

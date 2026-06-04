@@ -49,6 +49,7 @@ return {
           show_buffer_close_icons = true, -- Adds the 'X' close icon on tabs
           show_close_icon = true,
           diagnostics = "nvim_lsp",       -- Shows LSP error/warning hints on tabs
+          numbers = "ordinal",
           offsets = {
             {
               filetype = "neo-tree",
@@ -62,28 +63,17 @@ return {
 
       -- Optional Handy Tab Switching Shortcuts (Alt + Number)
       local map = vim.keymap.set
-      map("n", "<C-1>", "<Cmd>BufferLineGoToBuffer 1<CR>", { silent = true })
-      map("n", "<C-2>", "<Cmd>BufferLineGoToBuffer 2<CR>", { silent = true })
-      map("n", "<C-3>", "<Cmd>BufferLineGoToBuffer 3<CR>", { silent = true })
-      map("n", "<C-4>", "<Cmd>BufferLineGoToBuffer 4<CR>", { silent = true })
-      map("n", "<C-5>", "<Cmd>BufferLineGoToBuffer 5<CR>", { silent = true })
-      map("n", "<C-6>", "<Cmd>BufferLineGoToBuffer 6<CR>", { silent = true })
-      map("n", "<C-7>", "<Cmd>BufferLineGoToBuffer 7<CR>", { silent = true })
-      map("n", "<C-8>", "<Cmd>BufferLineGoToBuffer 8<CR>", { silent = true })
-      map("n", "<C-9>", "<Cmd>BufferLineGoToBuffer 9<CR>", { silent = true })
-      map("n", "<C-10>", "<Cmd>BufferLineGoToBuffer 10<CR>", { silent = true })
-      map("n", "<C-11>", "<Cmd>BufferLineGoToBuffer 11<CR>", { silent = true })
-      map("n", "<C-12>", "<Cmd>BufferLineGoToBuffer 12<CR>", { silent = true })
-      map("n", "<C-13>", "<Cmd>BufferLineGoToBuffer 13<CR>", { silent = true })
-      map("n", "<C-14>", "<Cmd>BufferLineGoToBuffer 14<CR>", { silent = true })
-      map("n", "<C-15>", "<Cmd>BufferLineGoToBuffer 15<CR>", { silent = true })
-      map("n", "<C-16>", "<Cmd>BufferLineGoToBuffer 16<CR>", { silent = true })
-      map("n", "<C-17>", "<Cmd>BufferLineGoToBuffer 17<CR>", { silent = true })
-      map("n", "<C-18>", "<Cmd>BufferLineGoToBuffer 18<CR>", { silent = true })
-      map("n", "<C-19>", "<Cmd>BufferLineGoToBuffer 19<CR>", { silent = true })
-      map("n", "<C-20>", "<Cmd>BufferLineGoToBuffer 20<CR>", { silent = true })
-      map("n", "<C-p>", "<Cmd>BufferLineCyclePrev<CR>", { silent = true })
-      map("n", "<C-n>", "<Cmd>BufferLineCycleNext<CR>", { silent = true })
+      map("n", "<Leader>1", "<Cmd>BufferLineGoToBuffer 1<CR>", { silent = true })
+      map("n", "<Leader>2", "<Cmd>BufferLineGoToBuffer 2<CR>", { silent = true })
+      map("n", "<Leader>3", "<Cmd>BufferLineGoToBuffer 3<CR>", { silent = true })
+      map("n", "<Leader>4", "<Cmd>BufferLineGoToBuffer 4<CR>", { silent = true })
+      map("n", "<Leader>5", "<Cmd>BufferLineGoToBuffer 5<CR>", { silent = true })
+      map("n", "<Leader>6", "<Cmd>BufferLineGoToBuffer 6<CR>", { silent = true })
+      map("n", "<Leader>7", "<Cmd>BufferLineGoToBuffer 7<CR>", { silent = true })
+      map("n", "<Leader>8", "<Cmd>BufferLineGoToBuffer 8<CR>", { silent = true })
+      map("n", "<Leader>9", "<Cmd>BufferLineGoToBuffer 9<CR>", { silent = true })
+      map("n", "<Leader>p", "<Cmd>BufferLineCyclePrev<CR>", { silent = true })
+      map("n", "<Leader>n", "<Cmd>BufferLineCycleNext<CR>", { silent = true })
     end
   },
 
@@ -244,6 +234,31 @@ return {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = { },
+  },
+  {
+    "dnlhc/glance.nvim",
+    config = function()
+      require("glance").setup({
+        height = 15, -- Height of the preview window body
+        detached = true,
+        skip_empty_open = true,
+        list = {
+          position = 'right',
+          width = 0.2,
+        },
+        border = {
+          enable = true,
+          top_char = "─", bottom_char = "─", left_char = "│", right_char = "│",
+          top_left_char = "╭", top_right_char = "╮", bottom_left_char = "╰", bottom_right_char = "╯",
+        },
+        mappings = {
+          list = {
+            ["<Esc>"] = require("glance").actions.close, -- Press Esc to dismiss the preview container
+            ["q"] = require("glance").actions.close,
+          },
+        },
+      })
+    end,
   }
 }
 

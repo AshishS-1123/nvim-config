@@ -277,5 +277,31 @@ return {
       vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Find Files' })
     end
   },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      lsp = {
+        -- Override markdown rendering so Noice takes over
+        hover = {
+          enabled = true,
+        },
+        signature = {
+          enabled = true,
+        },
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+      },
+      presets = {
+        lsp_doc_border = true,
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    }
+  }
 }
 

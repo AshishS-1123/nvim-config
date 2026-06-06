@@ -88,7 +88,7 @@ return {
           
           {
             text = { builtin.lnumfunc, "│" },
-            hl = "LineNr",
+            hl = "NonText",
             click = "v:lua.ScLa",
           },
           {
@@ -184,12 +184,7 @@ return {
   },
 
   --  Theme
-  {
-    "Mofiqul/vscode.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function() vim.cmd.colorscheme("vscode") end
-  },
+  { "Everblush/nvim", name = "everblush" },
 
   --  Smooth Scrolling Engine (Neoscroll)
   {

@@ -13,6 +13,8 @@ vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.expandtab = true
 
+vim.cmd('colorscheme everblush')
+
 vim.diagnostic.config({
   virtual_text = {
     spacing = 4,

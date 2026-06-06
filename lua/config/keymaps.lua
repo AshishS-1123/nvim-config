@@ -5,7 +5,6 @@ local opts = { noremap = true, silent = true }
 keymap({ "n", "i", "v" }, "<C-s>", "<Cmd>w<CR><Esc>", { desc = "Save File" })
 
 -- Ctrl + C / Ctrl + V for Copy/Paste
--- Note: 'unnamedplus' handles this natively with y/p, but these force standard OS behavior
 keymap("v", "<C-c>", '"+y', opts)
 keymap("v", "<C-v>", '"+P', opts)
 keymap("i", "<C-v>", '<C-r>+', opts)

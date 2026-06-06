@@ -9,6 +9,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    { import = "plugins" }, -- This automatically loads everything inside the plugins/ folder
+    { import = "plugins" },
   },
 })

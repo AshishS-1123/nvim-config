@@ -1,5 +1,5 @@
 return {
-  -- 1. File Explorer (Neo-tree)
+  -- File Explorer (Neo-tree)
   {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
@@ -8,16 +8,14 @@ return {
       require("neo-tree").setup({
         enable_mouse_support = true,
         default_component_configs = {
-          -- Adjusts the layout spacing
           indent = {
-            with_expanders = true, -- Shows nice arrows next to folders
+            with_expanders = true,
             expander_collapsed = "",
             expander_expanded = "",
           },
-          -- Modifies the icon rendering space
           icon = {
-            folder_closed = " ", -- Notice the extra space inside the quotes
-            folder_open = " ",   -- This adds breathing room, making them look bigger
+            folder_closed = " ",
+            folder_open = " ",
             folder_empty = "󰜮 ",
             default = "󰈚 ",
             highlight = "NeoTreeFileIcon",
@@ -37,7 +35,7 @@ return {
     end
   },
 
-  -- 2. VS Code-Style Tabs (Bufferline)
+  --  VS Code-Style Tabs (Bufferline)
   {
     "akinsho/bufferline.nvim",
     version = "*",
@@ -46,9 +44,9 @@ return {
       require("bufferline").setup({
         options = {
           mode = "buffers",
-          show_buffer_close_icons = true, -- Adds the 'X' close icon on tabs
+          show_buffer_close_icons = true,
           show_close_icon = true,
-          diagnostics = "nvim_lsp",       -- Shows LSP error/warning hints on tabs
+          diagnostics = "nvim_lsp",
           numbers = "ordinal",
           offsets = {
             {
@@ -61,7 +59,6 @@ return {
         }
       })
 
-      -- Optional Handy Tab Switching Shortcuts (Alt + Number)
       local map = vim.keymap.set
       map("n", "<Leader>1", "<Cmd>BufferLineGoToBuffer 1<CR>", { silent = true })
       map("n", "<Leader>2", "<Cmd>BufferLineGoToBuffer 2<CR>", { silent = true })
@@ -77,7 +74,7 @@ return {
     end
   },
 
-  -- 3. Clickable Gutter Column (Statuscol) - Configured for Dual Line Numbers
+  --  Clickable Gutter Column (Statuscol) - Configured for Dual Line Numbers
   {
     "luukvbaal/statuscol.nvim",
     config = function()
@@ -86,25 +83,22 @@ return {
         relculright = true,
         ft_ignore = { "neo-tree", "lazy", "mason", "toggleterm", "alpha" },
         segments = {
-          { text = { builtin.foldfunc }, click = "v:lua.ScFa" }, -- Clickable Fold Arrows
-          { text = { "%s" }, click = "v:lua.ScSa" },             -- Git Signs / Breakpoints
+          { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+          { text = { "%s" }, click = "v:lua.ScSa" },
           
-          -- COLUMN 1: Relative Line Numbers (Perfect for quick jumps)
           {
             text = { builtin.lnumfunc, "│" },
-            hl = "LineNr", -- Uses the standard, brighter line number color
+            hl = "LineNr",
             click = "v:lua.ScLa",
           },
-          -- COLUMN 2: Pure Absolute Line Numbers (Perfect for Debugging)
           {
             text = {
               function(args)
-                -- Right-aligns and pads the numbers cleanly up to 999 lines (change to %4d if working in massive files)
                 return string.format("%2d", args.lnum)
               end,
               " "
             },
-            hl = "NonText", -- Uses a dimmer color group so it doesn't clutter your vision
+            hl = "NonText",
             click = "v:lua.ScLa",
           },
         },
@@ -112,21 +106,19 @@ return {
     end,
   },
 
-  -- 4. Code Folding Engine (Nvim-ufo)
+  -- Folding Engine (Nvim-ufo)
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
     config = function()
-      -- Configure Neovim's core fold options to display arrows nicely
-      vim.o.foldcolumn = '2' -- Show fold column
+      vim.o.foldcolumn = '2'
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
       
-      -- Define modern VS Code style arrow symbols for folding
       vim.opt.fillchars = { 
-        foldopen = "▼",   -- Large solid down triangle
-        foldclose = "▶",  -- Large solid right triangle
+        foldopen = "▼",
+        foldclose = "▶",
         fold = " ", 
         foldsep = " " 
       }
@@ -136,20 +128,19 @@ return {
           if fileType == "neo-tree" then 
             return ""
           end
-          return { "lsp", "indent" } -- Uses your LSP setup to determine fold boundaries
+          return { "lsp", "indent" }
         end
       })
     end
   },
 
-  -- 5. Interactive Breadcrumbs & Symbol Navigation (Dropbar)
+  --  Interactive Breadcrumbs & Symbol Navigation (Dropbar)
   {
     "Bekaboo/dropbar.nvim",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      -- Generates a clickable winbar breadcrumb at the top of every file
       require("dropbar").setup()
       
       vim.api.nvim_set_hl(0, "WinBar", { fg = "#c5c5c5", bg = "#252526" })
@@ -159,7 +150,6 @@ return {
         group = vim.api.nvim_create_augroup("DropbarForce", { clear = true }),
         pattern = "*",
         callback = function()
-          -- Only apply to actual source code files (skips neo-tree, terminal rows, and empty dashboards)
           if vim.bo.buftype == "" and vim.bo.filetype ~= "neo-tree" and vim.fn.win_gettype() == "" then
             vim.wo.winbar = "%{%v:lua.dropbar()%}"
           end
@@ -168,13 +158,13 @@ return {
     end
   },
 
-  -- 6. Git Gutters
+  --  Git Gutters
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("gitsigns").setup() end
   },
 
-  -- 7. Syntax Highlighting (Treesitter)
+  --  Syntax Highlighting (Treesitter)
 {
     "nvim-treesitter/nvim-treesitter",
     branch = "master",
@@ -182,18 +172,18 @@ return {
     config = function()
       local ts = require("nvim-treesitter")
       
-      -- Initialize default setup
       ts.setup({
         ensure_installed = { "javascript", "typescript", "rust", "dart", "lua", "c", "cpp", "markdown", "markdown_inline" },
         auto_install = true,
         highlight = {
-          enable = true, -- Activate syntax highlighting
+          enable = true,
+          disable = false,
         },
       })
     end
   },
 
-  -- 8. Theme
+  --  Theme
   {
     "Mofiqul/vscode.nvim",
     lazy = false,
@@ -201,25 +191,21 @@ return {
     config = function() vim.cmd.colorscheme("vscode") end
   },
 
-  -- 9. Smooth Scrolling Engine (Neoscroll)
+  --  Smooth Scrolling Engine (Neoscroll)
   {
     "karb94/neoscroll.nvim",
     config = function()
       require('neoscroll').setup({
-        -- Target these specific default navigation keys for smooth animations
         mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
-        hide_cursor = true,          -- Temporarily hide cursor during scroll so it doesn't flicker
-        stop_eof = true,             -- Stop scrolling smoothly at the end of the file
-        respect_scrolloff = false,   -- Smooth glide regardless of cursor margins
-        cursor_scrolls_alone = true, -- Cursor glides naturally if window boundaries are reached
-        easing_function = "quadratic" -- Options: "linear", "quadratic", "cubic", "sine", "circular"
+        hide_cursor = true,
+        stop_eof = true,
+        respect_scrolloff = false,
+        cursor_scrolls_alone = true,
+        easing_function = "quadratic"
       })
 
-      -- Customizing the scrolling speed directly
       local neoscroll = require('neoscroll')
       local keymap = {
-        -- Format: neoscroll.scroll(lines, move_cursor, duration_in_ms)
-        -- Increasing the duration_in_ms makes the scroll SLOWER and smoother.
         ["<C-d>"] = function() neoscroll.scroll(vim.wo.scroll, true, 350) end,
         ["<C-u>"] = function() neoscroll.scroll(-vim.wo.scroll, true, 350) end,
         ["<C-f>"] = function() neoscroll.scroll(vim.api.nvim_win_get_height(0), true, 450) end,
@@ -238,11 +224,12 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = { },
   },
+  -- Peek Preview 
   {
     "dnlhc/glance.nvim",
     config = function()
       require("glance").setup({
-        height = 15, -- Height of the preview window body
+        height = 15,
         detached = true,
         skip_empty_open = true,
         list = {
@@ -256,13 +243,14 @@ return {
         },
         mappings = {
           list = {
-            ["<Esc>"] = require("glance").actions.close, -- Press Esc to dismiss the preview container
+            ["<Esc>"] = require("glance").actions.close,
             ["q"] = require("glance").actions.close,
           },
         },
       })
     end,
   },
+  -- File and Global Search.
   {
     'nvim-telescope/telescope.nvim',
     branch = 'master',
@@ -270,7 +258,6 @@ return {
     config = function()
       local builtin = require('telescope.builtin')
       
-      -- Keymaps
       -- Search current file (Ctrl + F)
       vim.keymap.set('n', '<leader>f', builtin.current_buffer_fuse_grep or builtin.current_buffer_fuzzy_find, { desc = 'Search in current file' })
       
@@ -280,12 +267,12 @@ return {
       vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Find Files' })
     end
   },
+  -- Creating windows for stuff.
   {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
       lsp = {
-        -- Override markdown rendering so Noice takes over
         hover = {
           enabled = true,
         },
@@ -305,6 +292,49 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
     }
+  },
+  {
+    "saghen/blink.cmp",
+    lazy = false,
+    version = "*",
+    dependencies = "rafamadriz/friendly-snippets",
+    opts = {
+      keymap = { preset = "default" },
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer" },
+      },
+    },
+    config = function(_, opts)
+      local blink = require("blink.cmp")
+      blink.setup(opts)
+  
+      vim.api.nvim_create_autocmd("TextChangedI", {
+        group = vim.api.nvim_create_augroup("BlinkAutoCloseExactMatch", { clear = true }),
+        callback = function()
+          vim.schedule(function()
+            if blink.is_visible() then
+              local cursor = vim.api.nvim_win_get_cursor(0)
+              local line = vim.api.nvim_get_current_line()
+              local col = cursor[2]
+              
+              local before_cursor = line:sub(1, col)
+              local current_word = vim.trim(before_cursor:match("[%w_]+$") or "")
+
+              if current_word then
+                local list = require("blink.cmp.completion.list")
+                for i = 1, math.min(5, #list.items) do
+                  item = list.items[i]
+                  if vim.trim(item.filterText or "") == current_word then
+                    blink.hide()
+                    break
+                  end
+                end
+              end
+            end
+          end)
+        end,
+      })
+    end,
   }
 }
-
+  

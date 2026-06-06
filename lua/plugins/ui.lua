@@ -287,49 +287,6 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
     }
-  },
-  {
-    "saghen/blink.cmp",
-    lazy = false,
-    version = "*",
-    dependencies = "rafamadriz/friendly-snippets",
-    opts = {
-      keymap = { preset = "default" },
-      sources = {
-        default = { "lsp", "path", "snippets", "buffer" },
-      },
-    },
-    config = function(_, opts)
-      local blink = require("blink.cmp")
-      blink.setup(opts)
-  
-      vim.api.nvim_create_autocmd("TextChangedI", {
-        group = vim.api.nvim_create_augroup("BlinkAutoCloseExactMatch", { clear = true }),
-        callback = function()
-          vim.schedule(function()
-            if blink.is_visible() then
-              local cursor = vim.api.nvim_win_get_cursor(0)
-              local line = vim.api.nvim_get_current_line()
-              local col = cursor[2]
-              
-              local before_cursor = line:sub(1, col)
-              local current_word = vim.trim(before_cursor:match("[%w_]+$") or "")
-
-              if current_word then
-                local list = require("blink.cmp.completion.list")
-                for i = 1, math.min(5, #list.items) do
-                  item = list.items[i]
-                  if vim.trim(item.filterText or "") == current_word then
-                    blink.hide()
-                    break
-                  end
-                end
-              end
-            end
-          end)
-        end,
-      })
-    end,
   }
 }
   

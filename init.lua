@@ -113,9 +113,16 @@ vim.api.nvim_create_user_command("SafeClose", function()
     vim.cmd("bnext")
     pcall(vim.cmd, "bd " .. current_buf)
   else
-    vim.cmd("enew")
-    if vim.api.nvim_buf_is_valid(current_buf) then
-      pcall(vim.cmd, "bd " .. current_buf)
+    local buf_name = vim.api.nvim_buf_get_name(current_buf)
+    local is_empty_dummy = buf_name == "" and not vim.bo[current_buf].modified
+    
+    if is_empty_dummy then
+      vim.cmd("noautocmd qall")
+    else
+      vim.cmd("enew")
+      if vim.api.nvim_buf_is_valid(current_buf) then
+        pcall(vim.cmd, "bd " .. current_buf)
+      end
     end
   end
 end, {})

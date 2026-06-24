@@ -96,3 +96,61 @@ vim.keymap.set('n', '<C-k>', trigger_hover, { desc = "LSP Hover Docs in Normal M
 vim.keymap.set('i', '<C-k>', trigger_hover, { desc = "LSP Hover Docs in Insert Mode", silent = true })
 vim.keymap.set({'n', 'v'}, '<C-LeftMouse>', smart_definition_handler, { desc = "LSP Definition via Ctrl+Click", silent = true })
 
+vim.api.nvim_create_user_command("SafeClose", function()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local listed_bufs = vim.fn.getbufinfo({ buflisted = 1 })
+  
+  local normal_bufs = {}
+  for _, b in ipairs(listed_bufs) do
+    local ft = vim.bo[b.bufnr].filetype
+    local bt = vim.bo[b.bufnr].buftype
+    if ft ~= "neo-tree" and ft ~= "aerial" and bt == "" and vim.bo[b.bufnr].buflisted then
+      table.insert(normal_bufs, b.bufnr)
+    end
+  end
+
+  if #normal_bufs > 1 then
+    vim.cmd("bnext")
+    pcall(vim.cmd, "bd " .. current_buf)
+  else
+    vim.cmd("enew")
+    if vim.api.nvim_buf_is_valid(current_buf) then
+      pcall(vim.cmd, "bd " .. current_buf)
+    end
+  end
+end, {})
+
+vim.cmd([[cnoreabbrev <expr> q (getcmdtype() == ':' && getcmdline() == 'q') ? 'SafeClose' : 'q']])
+
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+  group = vim.api.nvim_create_augroup("RecoverLayout", { clear = true }),
+  callback = function()
+    if vim.fn.expand("%") == "[Command Line]" then return end
+    
+    local wins = vim.api.nvim_tabpage_list_wins(0)
+    local only_sidebars = true
+    
+    for _, win in ipairs(wins) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local ft = vim.bo[buf].filetype
+      local bt = vim.bo[buf].buftype
+      
+      if ft ~= "neo-tree" and ft ~= "aerial" and ft ~= "qf" and ft ~= "help" and ft ~= "" then
+        only_sidebars = false
+        break
+      end
+      if ft == "" and bt == "" then
+        only_sidebars = false
+        break
+      end
+    end
+    
+    if only_sidebars then
+      pcall(vim.cmd, "AerialClose")
+      pcall(vim.cmd, "Neotree close")
+      vim.cmd("enew")              -- Spawn clean center staging window
+      pcall(vim.cmd, "Neotree show") -- Restore your left side explorer
+    end
+  end,
+})
+

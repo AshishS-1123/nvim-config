@@ -81,7 +81,7 @@ return {
       local builtin = require("statuscol.builtin")
       require("statuscol").setup({
         relculright = true,
-        ft_ignore = { "neo-tree", "lazy", "mason", "toggleterm", "alpha" },
+        ft_ignore = { "neo-tree", "lazy", "mason", "toggleterm", "alpha", "aerial" },
         segments = {
           { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
           { text = { "%s" }, click = "v:lua.ScSa" },
@@ -287,6 +287,82 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
     }
+  },
+  -- Aerial for showing minimap.
+  {
+    "stevearc/aerial.nvim",
+    dependencies = {
+       "nvim-treesitter/nvim-treesitter",
+       "nvim-tree/nvim-web-devicons"
+    },
+    config = function()
+      require("aerial").setup({
+        -- Backends used to harvest the functions/classes (LSP is preferred, falls back to Treesitter)
+        backends = { "lsp", "treesitter", "markdown", "man" },
+        open_automatic = true,
+  
+        layout = {
+          default_direction = "right", -- Places the pane on the right side
+          width = 35,                 -- Width of the pane
+          min_width = 25,
+          max_width = 0.5,            -- Max 50% of the screen
+        },
+  
+        -- Restrict symbols to just classes, methods, and functions as requested
+        filter_kind = {
+          "Class",
+          "Constructor",
+          "Enum",
+          "Function",
+          "Interface",
+          "Module",
+          "Method",
+          "Struct",
+        },
+  
+        -- Keymaps inside the aerial sidebar pane
+        keymaps = {
+          ["<LeftMouse>"] = "actions.jump",   -- Single-click to jump to definition
+          ["h"] = "actions.tree_close",       -- Collapse node
+          ["l"] = "actions.tree_open",        -- Expand node
+          ["zo"] = "actions.tree_open",       -- Standard vim fold open
+          ["zc"] = "actions.tree_close",      -- Standard vim fold close
+          ["zA"] = "actions.tree_toggle_recursive",
+          ["<LeftMouse>"] = function()
+            local actions = require("aerial.actions")
+            actions.tree_toggle() -- Expand/collapse the item in the sidebar
+            actions.jump()        -- Jump your main cursor to the definition
+          end,
+          ["<CR>"] = function()
+            local actions = require("aerial.actions")
+            actions.tree_toggle() -- Expand/collapse the item in the sidebar
+            actions.jump()        -- Jump your main cursor to the definition
+          end,
+        },
+  
+        -- Manage icons and formatting
+        show_guides = true, -- Shows tree guide lines for collapsible structures
+        guides = {
+          mid_item = "├─ ",
+          last_item = "└─ ",
+          nested_top = "│ ",
+          whitespace = "  ",
+        },
+      })
+  
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "aerial",
+        callback = function()
+          vim.opt_local.number = false
+          vim.opt_local.relativenumber = false
+          vim.opt_local.signcolumn = "no"
+          vim.opt_local.foldcolumn = "0"
+        end,
+      })
+
+      -- Keymap to toggle the code outline pane (sets it to Space + o)
+      vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle! right<CR>", { desc = "Toggle Code Outline" })
+    end,
   }
 }
-  
+

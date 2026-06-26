@@ -363,6 +363,89 @@ return {
       -- Keymap to toggle the code outline pane (sets it to Space + o)
       vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle! right<CR>", { desc = "Toggle Code Outline" })
     end,
-  }
+  },
+  -- Colored brackets.
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require('rainbow-delimiters.setup').setup({
+        strategy = {
+          [''] = require('rainbow-delimiters').strategy['global'],
+        },
+      })
+
+      local colors = {
+        ["RainbowDelimiterRed"]    = { fg = "#e57474" }, -- Soft Red
+        ["RainbowDelimiterYellow"] = { fg = "#e1bb7e" }, -- Muted Gold/Yellow
+        ["RainbowDelimiterBlue"]   = { fg = "#67b0e8" }, -- Pastel Blue
+        ["RainbowDelimiterOrange"] = { fg = "#e5c07b" }, -- Warm Amber
+        ["RainbowDelimiterGreen"]  = { fg = "#8ccf7e" }, -- Soft Teal/Green
+        ["RainbowDelimiterViolet"] = { fg = "#c47fd5" }, -- Muted Purple
+        ["RainbowDelimiterCyan"]   = { fg = "#6cbfbf" }, -- Desaturated Cyan
+      }
+
+      for group, opts in pairs(colors) do
+        vim.api.nvim_set_hl(0, group, opts)
+      end
+    end
+  },
+  -- Inline Virtual Text Block End-Labels (Safe & Smart Flutter Resolver)
+  {
+    "haringsrob/nvim_context_vt",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require('nvim_context_vt').setup({
+        -- Custom prefix to keep it looking clean and faint
+        prefix = " ⟹ ",
+        
+        -- Disable by default for specific files if they get too noisy
+        disable_ft = { "markdown", "yaml", "dart" },
+        
+        -- Controls what nodes are looked at (Functions, classes, conditional statements, loops)
+        filter = function(node, bufnr)
+          return true
+        end,
+      })
+
+      -- Make the characters faint/dim by linking them to a commentary or non-text highlight group
+      vim.api.nvim_set_hl(0, "ContextVt", { fg = "#4b6875", italic = true })
+    end
+  },
+  -- Dedicated Flutter & Dart tooling suite
+  {
+    "nvim-flutter/flutter-tools.nvim",
+    lazy = false, -- Load explicitly for immediate Dart buffer hooks
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- Optional but gives beautiful UI selections
+    },
+    config = function()
+      require("flutter-tools").setup({
+        -- 1. NATIVE CLOSING LABELS (Fixes your bracket bug completely!)
+        closing_tags = {
+          highlight = "ContextVt", -- Maps perfectly to your Everblush color palette
+          prefix = " ⟹  ",          -- Use the custom arrow style you prefer
+          enabled = true,
+        },
+        
+        -- 2. FLUTTER INTEGRATIONS
+        widget_guides = {
+          enabled = true, -- Optional: Draws subtle visual guidelines down nested elements
+        },
+        
+        -- 3. AUTOMATIC LANGUAGE SERVER CONFIG
+        lsp = {
+          color = {
+            enabled = true, -- Automatically parses color codes into UI highlights
+          },
+          settings = {
+            showTodos = true,
+            completeFunctionCalls = true,
+          }
+        }
+      })
+    end
+  },
 }
 

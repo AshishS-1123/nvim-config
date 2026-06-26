@@ -161,3 +161,15 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
   end,
 })
 
+-- Force current matching bracket pair to light up clearly
+vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
+  callback = function()
+    -- Style 1: Subtle, modern background block highlight
+    vim.api.nvim_set_hl(0, "MatchParen", { 
+      fg = "NONE",    -- Deep background color matching Everblush text rows
+      bg = "#323641",    -- Vibrant Everblush Cyan backdrop to make the character pop
+      bold = true,       -- Thicken the bracket font weight
+    })
+  end,
+})
+

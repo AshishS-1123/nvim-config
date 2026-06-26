@@ -9,6 +9,8 @@
 7. Display definition of function using `<Ctrl+k>`.
 8. Open definition of function/variable using `<Ctrl+Click>`. If function is in same file, opens a preview window, otherwise opens a new tab.
 9. Implement file search using `<Space-f>` and `<Space-F>` for global search.
+10. Highlight **matching brackets**. If you place your cursor on a bracket, highlight its matching one.
+11. Auto format brackets when typing code blocks.
 
 # Setup Instructions
 

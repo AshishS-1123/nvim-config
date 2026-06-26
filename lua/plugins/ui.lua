@@ -283,6 +283,19 @@ return {
       presets = {
         lsp_doc_border = true,
       },
+      routes = {
+        {
+          filter = {
+            event = "msg_show",
+            kind = "emsg",
+          },
+          view = "notify",
+        },
+        {
+          filter = { error = true },
+          view = "notify",
+        },
+      },
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
@@ -444,6 +457,43 @@ return {
             completeFunctionCalls = true,
           }
         }
+      })
+    end
+  },
+  -- Automatic Bracket Pairing and Smart Formatting
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+      local autopairs = require("nvim-autopairs")
+      
+      autopairs.setup({
+        check_ts = true, -- Leverage Tree-sitter for intelligent code context
+        disable_filetype = { "TelescopePrompt" },
+      })
+
+      -- Add the dynamic rule to make <Enter> format your scopes
+      local Rule = require('nvim-autopairs.rule')
+      local cond = require('nvim-autopairs.conds')
+
+      -- Target matching pairs: {}, [], ()
+      local brackets = { { '{', '}' }, { '[', ']' }, { '(', ')' } }
+      
+      autopairs.add_rules({
+        -- This forces brackets to break smoothly onto 3 clean indented lines
+        Rule(' ', ' ')
+          :with_pair(function(opts)
+            local pair = opts.line:sub(opts.col - 1, opts.col)
+            return vim.tbl_contains({ '()', '[]', '{}' }, pair)
+          end)
+          :with_move(cond.none())
+          :with_cr(cond.none())
+          :with_del(function(opts)
+            local col = opts.col
+            local line = opts.line
+            local pair = line:sub(col - 1, col)
+            return vim.tbl_contains({ '  ' }, pair)
+          end)
       })
     end
   },

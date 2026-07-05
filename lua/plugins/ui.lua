@@ -7,6 +7,9 @@ return {
     config = function()
       require("neo-tree").setup({
         enable_mouse_support = true,
+        window = {
+          width = 30,
+        },
         default_component_configs = {
           indent = {
             with_expanders = true,
@@ -187,33 +190,33 @@ return {
   { "Everblush/nvim", name = "everblush" },
 
   --  Smooth Scrolling Engine (Neoscroll)
-  {
-    "karb94/neoscroll.nvim",
-    config = function()
-      require('neoscroll').setup({
-        mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
-        hide_cursor = true,
-        stop_eof = true,
-        respect_scrolloff = false,
-        cursor_scrolls_alone = true,
-        easing_function = "quadratic"
-      })
+  -- {
+  --   "karb94/neoscroll.nvim",
+  --   config = function()
+  --     require('neoscroll').setup({
+  --       mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
+  --       hide_cursor = true,
+  --       stop_eof = true,
+  --       respect_scrolloff = false,
+  --       cursor_scrolls_alone = true,
+  --       easing_function = "quadratic"
+  --     })
 
-      local neoscroll = require('neoscroll')
-      local keymap = {
-        ["<C-d>"] = function() neoscroll.scroll(vim.wo.scroll, true, 350) end,
-        ["<C-u>"] = function() neoscroll.scroll(-vim.wo.scroll, true, 350) end,
-        ["<C-f>"] = function() neoscroll.scroll(vim.api.nvim_win_get_height(0), true, 450) end,
-        ["<C-b>"] = function() neoscroll.scroll(-vim.api.nvim_win_get_height(0), true, 450) end,
-      }
-
-      for key, func in pairs(keymap) do
-        vim.keymap.set('n', key, func)
-        vim.keymap.set('x', key, func)
-        vim.keymap.set('i', key, func, { silent = true })
-      end
-    end
-  },
+      -- local neoscroll = require('neoscroll')
+      -- local keymap = {
+      --   ["<C-d>"] = function() neoscroll.scroll(vim.wo.scroll, true, 350) end,
+      --   ["<C-u>"] = function() neoscroll.scroll(-vim.wo.scroll, true, 350) end,
+      --   ["<C-f>"] = function() neoscroll.scroll(vim.api.nvim_win_get_height(0), true, 450) end,
+      --   ["<C-b>"] = function() neoscroll.scroll(-vim.api.nvim_win_get_height(0), true, 450) end,
+      -- }
+-- 
+ --      for key, func in pairs(keymap) do
+ --        vim.keymap.set('n', key, func)
+ --        vim.keymap.set('x', key, func)
+ --        vim.keymap.set('i', key, func, { silent = true })
+ --      end
+ --    end
+ --  },
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },

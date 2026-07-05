@@ -101,9 +101,6 @@ return {
       },
       signature = {
         enabled = true,
-        trigger = {
-          show_on_keyboard = false,
-        },
       },
     },
   }
